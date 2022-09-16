@@ -12,9 +12,16 @@ import { styles } from './styles';
 
 import logoImg from '../../assets/logo-nlw-esports.png';
 import { Background } from '../../components/Background';
+import { useNavigation } from '@react-navigation/native';
 
 export const Home = observer(() => {
   const { games, setGames } = useContext(gameStore);
+
+  const navigation = useNavigation();
+
+  function handleOpenGame() {
+    navigation.navigate('game');
+  }
 
   useEffect(() => {
     fetch('http://10.0.0.106:3333/games')
@@ -35,7 +42,7 @@ export const Home = observer(() => {
           data={games}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => {
-            return <GameCard data={item} />;
+            return <GameCard data={item} onPress={handleOpenGame} />;
           }}
           showsHorizontalScrollIndicator={false}
           horizontal
