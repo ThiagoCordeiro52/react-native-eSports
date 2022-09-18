@@ -7,6 +7,7 @@ import { TouchableOpacity, View, Image, FlatList, Text } from 'react-native';
 import { Background } from '../../components/Background';
 import { Heading } from '../../components/Heading';
 import { DuoCard } from '../../components/DuoCard';
+import { DuoMatch } from '../../components/DuoMatch';
 
 import gameStore from '../../stores/gameStore';
 
@@ -27,7 +28,14 @@ export const Game = observer(() => {
     navigation.goBack();
   }
 
-  const { duos, setDuos } = useContext(gameStore);
+  async function getDiscordUser(adsId: string) {
+    fetch(`http://10.0.0.106:3333/ads/${adsId}/discord`)
+      .then((response) => response.json())
+      .then((data) => setDiscordDuoSelected(data.discord));
+  }
+
+  const { duos, setDuos, discordDuoSelected, setDiscordDuoSelected } =
+    useContext(gameStore);
 
   useEffect(() => {
     fetch(`http://10.0.0.106:3333/games/${game.id}/ads`)
@@ -62,7 +70,7 @@ export const Game = observer(() => {
           data={duos}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
-            <DuoCard data={item} onConnect={() => {}} />
+            <DuoCard data={item} onConnect={() => getDiscordUser(item.id)} />
           )}
           style={styles.containerList}
           horizontal
@@ -75,6 +83,11 @@ export const Game = observer(() => {
               Não há anúncios publicados ainda.
             </Text>
           )}
+        />
+
+        <DuoMatch
+          visible={discordDuoSelected.length > 0}
+          discord={discordDuoSelected}
         />
       </SafeAreaView>
     </Background>

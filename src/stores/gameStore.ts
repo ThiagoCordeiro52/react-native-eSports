@@ -23,13 +23,16 @@ export interface Duo {
 class GameStore {
   games: Game[] = [];
   duos: Duo[] = [];
+  discordDuoSelected: string = '';
 
   constructor() {
     makeObservable(this, {
       games: observable,
       duos: observable,
+      discordDuoSelected: observable,
       setGames: action,
       setDuos: action,
+      setDiscordDuoSelected: action,
     });
   }
 
@@ -39,6 +42,10 @@ class GameStore {
 
   setDuos = (duoList: Duo[]) => {
     this.duos = duoList;
+  };
+
+  setDiscordDuoSelected = (discordSelected: string) => {
+    this.discordDuoSelected = discordSelected;
   };
 }
 
