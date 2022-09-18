@@ -6,7 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { GameCard } from '../../components/GameCard';
 import { Heading } from '../../components/Heading';
 
-import gameStore from '../../stores/gameStore';
+import gameStore, { Game } from '../../stores/gameStore';
 
 import { styles } from './styles';
 
@@ -19,8 +19,8 @@ export const Home = observer(() => {
 
   const navigation = useNavigation();
 
-  function handleOpenGame() {
-    navigation.navigate('game');
+  function handleOpenGame({ title, id, bannerUrl }: Game) {
+    navigation.navigate('game', { id, title, bannerUrl });
   }
 
   useEffect(() => {
@@ -42,7 +42,9 @@ export const Home = observer(() => {
           data={games}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => {
-            return <GameCard data={item} onPress={handleOpenGame} />;
+            return (
+              <GameCard data={item} onPress={() => handleOpenGame(item)} />
+            );
           }}
           showsHorizontalScrollIndicator={false}
           horizontal
